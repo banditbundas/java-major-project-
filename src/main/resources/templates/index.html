@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Banking System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Online Banking System</h1>
+            <p>Secure, Fast, and Reliable Banking Solutions</p>
+        </header>
+
+        <nav>
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </nav>
+
+        <main>
+            <section class="features">
+                <h2 style="text-align: center; color: white; font-size: 2.5em; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">✨ Key Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🔐 Secure Authentication</h3>
+                        <p>Advanced security with JWT tokens and optional two-factor authentication to keep your account safe</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💰 Account Management</h3>
+                        <p>Manage multiple accounts (Savings, Current, FD, RD) from one convenient dashboard</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💸 Fund Transfer</h3>
+                        <p>Transfer money between accounts instantly - both intra-bank and inter-bank transfers</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 Transaction History</h3>
+                        <p>View complete transaction history stored securely in XML format with advanced filtering</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💳 Balance Inquiry</h3>
+                        <p>Check account balance instantly with real-time updates after every transaction</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📈 Reports & Statements</h3>
+                        <p>Generate detailed reports and export transaction history in multiple formats</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p style="font-size: 1.1em; opacity: 0.9;">&copy; 2024 Online Banking System. All rights reserved.</p>
+            <p style="margin-top: 10px; opacity: 0.8; font-size: 0.9em;">Built with ❤️ using Spring Boot & Java</p>
+        </footer>
+    </div>
+</body>
+</html>
+

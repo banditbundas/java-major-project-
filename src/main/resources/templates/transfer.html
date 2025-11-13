@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Funds - Online Banking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>Transfer Funds</h1>
+            <nav class="dashboard-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/accounts}">My Accounts</a>
+                <a th:href="@{/transfer}">Transfer Funds</a>
+                <a th:href="@{/transactions}">Transactions</a>
+                <a href="#" onclick="handleLogout(event); return false;">Logout</a>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="transfer-container">
+                <h2 style="margin-bottom: 30px; color: #667eea;">💸 Transfer Funds</h2>
+                <form id="transferForm">
+                    <div class="form-group">
+                        <label for="fromAccount">📤 From Account</label>
+                        <select id="fromAccount" name="fromAccountNumber" required>
+                            <option value="">Loading accounts...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="toAccount">📥 To Account (Your Accounts)</label>
+                        <select id="toAccount" name="toAccountNumber">
+                            <option value="">Loading accounts...</option>
+                        </select>
+                        <small style="display: block; margin-top: 5px; color: #666;">Select one of your accounts, or enter external account below</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="externalAccount">🌐 External Account Number (Optional - if transferring to another bank)</label>
+                        <input type="text" id="externalAccount" name="externalAccountNumber" placeholder="Enter external account number">
+                    </div>
+                    <div class="form-group">
+                        <label for="ifscCode">🏦 IFSC Code (Optional - for external transfers)</label>
+                        <input type="text" id="ifscCode" name="ifscCode" placeholder="Enter IFSC code for external transfers">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">💰 Amount (₹)</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">📝 Description</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Add a note for this transaction"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">🚀 Transfer Funds</button>
+                </form>
+                <div id="errorMessage" class="error-message" style="display: none; margin-top: 20px; padding: 15px; background-color: #fee; color: #c33; border-radius: 5px;"></div>
+                <div id="successMessage" class="success-message" style="display: none; margin-top: 20px; padding: 15px; background-color: #efe; color: #3c3; border-radius: 5px;"></div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Simple logout handler
+        function handleLogout(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            localStorage.clear();
+            window.location.replace('/login');
+            return false;
+        }
+        
+        // Check auth on load
+        if (!localStorage.getItem('token')) {
+            window.location.replace('/login');
+        }
+    </script>
+    <script th:src="@{/js/transfer.js}"></script>
+</body>
+</html>

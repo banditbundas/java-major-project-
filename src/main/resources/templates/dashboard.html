@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Online Banking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <h1>Welcome back, <span id="userName">User</span>! 👋</h1>
+                    <p id="userEmail" style="color: #666; margin-top: 5px;">Loading...</p>
+                </div>
+                <nav class="dashboard-nav">
+                    <a th:href="@{/dashboard}">🏠 Dashboard</a>
+                    <a th:href="@{/accounts}">💳 Accounts</a>
+                    <a th:href="@{/transfer}">💸 Transfer</a>
+                    <a th:href="@{/transactions}">📊 Transactions</a>
+                    <a href="#" onclick="handleLogout(event); return false;">🚪 Logout</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- Account Summary Section -->
+            <section class="account-summary">
+                <h2>💰 Account Summary</h2>
+                <div id="accountSummary" class="summary-grid">
+                    <div class="summary-card loading">
+                        <div class="summary-icon">💳</div>
+                        <div class="summary-content">
+                            <h3>Total Balance</h3>
+                            <p class="summary-amount" id="totalBalance">₹0.00</p>
+                        </div>
+                    </div>
+                    <div class="summary-card loading">
+                        <div class="summary-icon">📊</div>
+                        <div class="summary-content">
+                            <h3>Total Accounts</h3>
+                            <p class="summary-amount" id="totalAccounts">0</p>
+                        </div>
+                    </div>
+                    <div class="summary-card loading">
+                        <div class="summary-icon">📈</div>
+                        <div class="summary-content">
+                            <h3>This Month</h3>
+                            <p class="summary-amount" id="monthTransactions">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions Section -->
+            <section class="quick-actions">
+                <h2>⚡ Quick Actions</h2>
+                <div class="action-grid">
+                    <div class="action-card" onclick="window.location.href='/accounts'">
+                        <div class="action-icon">💳</div>
+                        <h3>View Accounts</h3>
+                        <p>Check your account details and balances</p>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='/transfer'">
+                        <div class="action-icon">💸</div>
+                        <h3>Transfer Funds</h3>
+                        <p>Send money to other accounts</p>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='/transactions'">
+                        <div class="action-icon">📊</div>
+                        <h3>Transaction History</h3>
+                        <p>View your complete transaction history</p>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='/accounts'">
+                        <div class="action-icon">➕</div>
+                        <h3>Create Account</h3>
+                        <p>Open a new account</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accounts Overview -->
+            <section class="accounts-overview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>💳 Your Accounts</h2>
+                    <a href="/accounts" style="color: hsl(221.2 83.2% 53.3%); text-decoration: none; font-weight: 500;">View All →</a>
+                </div>
+                <div id="accountsOverview" class="accounts-grid">
+                    <div class="empty-state">
+                        <p>Loading accounts...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Transactions Section -->
+            <section class="recent-transactions">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>📋 Recent Transactions</h2>
+                    <a href="/transactions" style="color: hsl(221.2 83.2% 53.3%); text-decoration: none; font-weight: 500;">View All →</a>
+                </div>
+                <div id="recentTransactions">
+                    <div class="empty-state">
+                        <p>Loading transactions...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        // Simple logout handler
+        function handleLogout(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            localStorage.clear();
+            window.location.replace('/login');
+            return false;
+        }
+        
+        // Check auth on load
+        if (!localStorage.getItem('token')) {
+            window.location.replace('/login');
+        }
+    </script>
+    <script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

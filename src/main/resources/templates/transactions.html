@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Online Banking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>Transaction History</h1>
+            <nav class="dashboard-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/accounts}">My Accounts</a>
+                <a th:href="@{/transfer}">Transfer Funds</a>
+                <a th:href="@{/transactions}">Transactions</a>
+                <a href="#" onclick="handleLogout(event); return false;">Logout</a>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="section-header">
+                <h2>📊 Transaction History</h2>
+                <select id="accountSelect" onchange="loadTransactions()" style="padding: 10px 14px; border-radius: calc(0.5rem - 2px); border: 1px solid hsl(214.3 31.8% 91.4%); font-size: 0.9375rem; background: hsl(0 0% 100%); color: hsl(222.2 84% 4.9%);">
+                    <option value="">Loading accounts...</option>
+                </select>
+            </div>
+
+            <div class="filter-section">
+                <h3 style="margin-bottom: 16px; font-size: 1.125rem; font-weight: 600;">🔍 Filter Transactions</h3>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: end;">
+                    <div class="filter-group">
+                        <label for="startDate">📅 Start Date</label>
+                        <input type="datetime-local" id="startDate">
+                    </div>
+                    <div class="filter-group">
+                        <label for="endDate">📅 End Date</label>
+                        <input type="datetime-local" id="endDate">
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary" onclick="filterTransactions()" style="margin-right: 8px;">🔍 Filter</button>
+                        <button class="btn btn-secondary" onclick="resetFilter()">🔄 Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transactionsList" class="transactions-list">
+                <div class="empty-state">
+                    <p>Please select an account to view transactions</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Simple logout handler
+        function handleLogout(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            localStorage.clear();
+            window.location.replace('/login');
+            return false;
+        }
+        
+        // Check auth on load
+        if (!localStorage.getItem('token')) {
+            window.location.replace('/login');
+        }
+    </script>
+    <script th:src="@{/js/transactions.js}"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Accounts - Online Banking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>My Accounts</h1>
+            <nav class="dashboard-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/accounts}">My Accounts</a>
+                <a th:href="@{/transfer}">Transfer Funds</a>
+                <a th:href="@{/transactions}">Transactions</a>
+                <a href="#" onclick="handleLogout(event); return false;">Logout</a>
+            </nav>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="section-header">
+                <h2>💳 Your Accounts</h2>
+                <button class="btn btn-primary" onclick="showCreateAccountModal()">➕ Create New Account</button>
+            </div>
+
+            <div id="accountsList" class="accounts-grid">
+                <div class="empty-state">
+                    <p>Loading accounts...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Account Modal -->
+    <div id="createAccountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateAccountModal()" style="cursor: pointer; font-size: 32px; font-weight: bold; float: right; line-height: 1;">&times;</span>
+            <h2>➕ Create New Account</h2>
+            <form id="createAccountForm">
+                <div class="form-group">
+                    <label for="accountName">Account Name (Optional)</label>
+                    <input type="text" id="accountName" name="accountName" placeholder="e.g., My Savings Account">
+                </div>
+                <div class="form-group">
+                    <label for="accountType">Account Type</label>
+                    <select id="accountType" name="accountType" required>
+                        <option value="">Select Account Type</option>
+                        <option value="SAVINGS">💰 Savings Account</option>
+                        <option value="CURRENT">💼 Current Account</option>
+                        <option value="FIXED_DEPOSIT">📈 Fixed Deposit</option>
+                        <option value="RECURRING_DEPOSIT">🔄 Recurring Deposit</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <button type="button" class="btn btn-secondary" onclick="closeCreateAccountModal()" style="margin-top: 10px; width: 100%;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDepositModal()" style="cursor: pointer; font-size: 32px; font-weight: bold; float: right; line-height: 1;">&times;</span>
+            <h2>💰 Deposit Funds</h2>
+            <form id="depositForm">
+                <div class="form-group">
+                    <label for="depositAccountNumber">Account Number</label>
+                    <input type="text" id="depositAccountNumber" name="accountNumber" readonly style="background: hsl(210 40% 96.1%);">
+                </div>
+                <div class="form-group">
+                    <label for="depositAmount">Amount (₹)</label>
+                    <input type="number" id="depositAmount" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositDescription">Description (Optional)</label>
+                    <textarea id="depositDescription" name="description" rows="3" placeholder="Add a note for this deposit"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Deposit</button>
+                <button type="button" class="btn btn-secondary" onclick="closeDepositModal()" style="margin-top: 10px; width: 100%;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple logout handler
+        function handleLogout(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            localStorage.clear();
+            window.location.replace('/login');
+            return false;
+        }
+        
+        // Check auth on load
+        if (!localStorage.getItem('token')) {
+            window.location.replace('/login');
+        }
+        
+        // Fallback deposit modal function in case script loads late
+        // This ensures the function is available immediately
+        window.showDepositModal = window.showDepositModal || function(accountNumber) {
+            console.log('Fallback showDepositModal called with:', accountNumber);
+            
+            function tryOpenModal(retries) {
+                retries = retries || 0;
+                const modal = document.getElementById('depositModal');
+                
+                if (!modal) {
+                    if (retries < 10) {
+                        console.log('Modal not found, retrying... (' + (retries + 1) + '/10)');
+                        setTimeout(() => tryOpenModal(retries + 1), 50);
+                        return;
+                    }
+                    alert('Error: Deposit modal not found. Please refresh the page.');
+                    return;
+                }
+                
+                const accountInput = document.getElementById('depositAccountNumber');
+                if (accountInput) {
+                    accountInput.value = accountNumber;
+                }
+                
+                modal.style.display = 'block';
+                
+                // Focus on amount input
+                setTimeout(() => {
+                    const amountInput = document.getElementById('depositAmount');
+                    if (amountInput) {
+                        amountInput.focus();
+                    }
+                }, 100);
+            }
+            
+            tryOpenModal(0);
+        };
+        
+        window.closeDepositModal = window.closeDepositModal || function() {
+            const modal = document.getElementById('depositModal');
+            if (modal) {
+                modal.style.display = 'none';
+                const form = document.getElementById('depositForm');
+                if (form) {
+                    form.reset();
+                }
+            }
+        };
+    </script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/accounts.js}"></script>
+</body>
+</html>

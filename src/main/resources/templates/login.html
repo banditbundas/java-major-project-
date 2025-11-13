@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Banking</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <h2>🔐 Login to Your Account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">👤 Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">🔒 Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">🚀 Login</button>
+            </form>
+            <p class="auth-link">Don't have an account? <a th:href="@{/register}">👉 Register here</a></p>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+    <script th:src="@{/js/auth.js}"></script>
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // User is already logged in, redirect to dashboard
+                window.location.href = '/dashboard';
+            }
+        });
+    </script>
+</body>
+</html>
+
